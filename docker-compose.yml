@@ -1,0 +1,41 @@
+version: '3'
+
+#コンテナを出たあとにデータを保持するためボリュームを作成する
+volumes:
+  mysqldata:
+
+services:
+  app:
+    build:
+      context: .
+    environment:
+      - TZ=Asia/Tokyo
+      - DEBUG=app:*
+    tty: true
+    ports:
+      - '3000:3000'
+    restart: always
+    volumes:
+      - ./src:/app
+    networks:
+      - backend
+    depends_on:
+      - db
+    links:
+      - db
+
+  db:
+    image: mysql:8
+    env_file: ./mysql/mysql.env
+    environment:
+      - TZ=Asia/Tokyo
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d/:ro
+      - mysqldata:/var/lib/mysql
+    networks:
+      - backend
+
+networks:
+  backend:
