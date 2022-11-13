@@ -10,5 +10,8 @@
 <body>
   <h1><%= title %></h1>
   <p>Welcome to <%= title %></p>
+  <% if (typeof params !== 'undefined') { %>
+    <p>ユーザID: <%= params.userId %></p>
+  <% } %>
 </body>
 </html>
