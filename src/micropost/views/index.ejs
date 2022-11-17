@@ -8,7 +8,41 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
+  <%- include('./header') %>
   <h1><%= title %></h1>
-  <p>Welcome to <%= title %></p>
+
+  <% isAuth = true %>
+  <% if (!isAuth) { %>
+    <div class="flame">
+      <p>ちょっとした気持ちをつぶやくサービスです。<br>他人のつぶやきもみられます。</p>
+      <p>アカウント登録は<a href="/accounts/signup">こちら</a>から。</p>
+      <p>すでにアカウントをお持ちの方は<a href="/accounts/signin">こちら</a>から。</p>
+    </div>
+  <% } else { %>
+    <div class="flame">
+      <aside class="pane_left"><%- include('./sidebar') %></aside>
+      <main class="posts pane_right">
+        <h2>最新のつぶやき</h2>
+        <% for (let index = 1; index < 4; index++) { %>
+          <div class="post">
+            <div class="profile_filed">
+              <img src="<%= null %>" alt="profile image" class="profile_image">
+              <span class="username"><%= uesrname = 'aiyztt' %></span>
+            </div>
+            <div class="content_field">
+              <p"><%= content = 'As it did more and more with its tail, its hands became clumsy. It makes its nest high in the treetops.Kingdra sleeps on the seafloor where it is otherwise devoid of life.' %></p>
+              <span><%= date = '2d' %></span>
+            </div>
+            <div class="function_field">
+              <form action="/microposts/delete" method="post">
+                <input type="hidden" name="micropost_id" value="<%= micropostId = index %>">
+                <input type="submit" value="削除">
+              </form>
+            </div>
+          </div>
+        <% } %>
+      </main>
+    </div>
+  <% } %>
 </body>
 </html>

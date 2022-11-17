@@ -8,7 +8,23 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
+  <%- include('../header') %>
   <h1><%= title %></h1>
-  <p>Welcome to <%= title %></p>
+  <div>
+    <p>アカウント登録がまだの方は<a href="/accounts/signup">こちら</a>から。</p>
+  </div>
+
+  <form action="/" method="post">
+    <div class="form_item">
+      <label for="email">メールアドレス</label>
+      <input type="email" name="email" id="email" autocomplete="email" required>
+    </div>
+    <div class="form_item">
+      <label for="password">パスワード</label>
+      <input type="password" name="password" id="password" autocomplete="" required>
+    </div>
+    <input type="submit" value="ログイン">
+  </form>
+  
 </body>
 </html>

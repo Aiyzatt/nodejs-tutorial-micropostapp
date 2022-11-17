@@ -5,7 +5,7 @@ const globalConfig = require('../config/global');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: globalConfig.appName + ' | ' + 'toppage' });
+  res.render('index', { title: globalConfig.appName + ' | ' + 'トップページ' });
 });
 
 router.use('/users', require('./users'));

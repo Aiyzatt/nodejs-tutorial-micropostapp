@@ -8,10 +8,33 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
+  <%- include('./header') %>
   <h1><%= title %></h1>
-  <p>Welcome to <%= title %></p>
-  <% if (typeof params !== 'undefined') { %>
-    <p>ユーザID: <%= params.userId %></p>
-  <% } %>
+
+  <div class="flame">
+    <% isUserlist = false %>
+    <% if (!isUserlist) { %>
+      <aside class="sidebar"><%- include('./sidebar') %></aside>
+    <% } %>
+    <main class="users">
+      <% for (let index = 1; index < 4; index++) { %>
+        <div class="user">
+          <div class="profile_filed">
+            <img src="<%= null %>" alt="profile image" class="profile_image">
+            <span class="username"><%= uesrname = 'aiyztt' %></span>
+          </div>
+          <div class="function_field">
+            <% isAdmin = true %>
+            <% if (isAdmin) { %>
+            <form action="/users/delete" method="post">
+              <input type="hidden" name="user_id" value="<%= userId = index %>">
+              <input type="submit" value="削除">
+            </form>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    </main>
+  </div>
 </body>
 </html>
