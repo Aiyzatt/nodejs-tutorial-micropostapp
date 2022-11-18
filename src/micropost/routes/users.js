@@ -5,14 +5,14 @@ const globalConfig = require('../config/global');
 /* GET ユーザ一覧 */
 router.get('/', function(req, res, next) {
   res.render('users', {
-    title: globalConfig.appName + ' | ' + 'userlist',
+    title: globalConfig.appName + ' | ' + 'ユーザ一覧',
   });
 });
 
 /* GET ユーザ詳細 */
 router.get('/:userId', function(req, res, next) {
   res.render('users', {
-    title: globalConfig.appName + ' | ' + 'profile',
+    title: globalConfig.appName + ' | ' + 'ユーザ詳細',
     params: req.params,
   });
 });
@@ -20,7 +20,7 @@ router.get('/:userId', function(req, res, next) {
 /* GET ユーザ詳細_フォローリスト */
 router.get('/:userId/following', function(req, res, next) {
   res.render('users', {
-    title: globalConfig.appName + ' | ' + 'following users',
+    title: globalConfig.appName + ' | ' + 'フォロー中',
     params: req.params,
   });
 });
@@ -28,7 +28,7 @@ router.get('/:userId/following', function(req, res, next) {
 /* GET ユーザ詳細_フォロワーリスト */
 router.get('/:userId/followers', function(req, res, next) {
   res.render('users', {
-    title: globalConfig.appName + ' | ' + 'followers',
+    title: globalConfig.appName + ' | ' + 'フォロワー',
     params: req.params,
   });
 });
