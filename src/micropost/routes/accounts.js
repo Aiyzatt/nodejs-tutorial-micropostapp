@@ -17,7 +17,7 @@ router.get('/signup', function(req, res, next) {
 });
 
 /* POST ユーザ登録 */
-router.post('/signup', async function(req, res, next) {
+router.post('/signup', function(req, res, next) {
   const posts = req.body;
 
   knex('users')
