@@ -10,7 +10,6 @@ router.get('/', function(req, res, next) {
 
 /* GET ユーザ登録 */
 router.get('/signup', function(req, res, next) {
-  console.log(req.flash());
   res.render('accounts/signup', {
     title: globalConfig.appName + ' | ' + 'アカウント登録',
   });
