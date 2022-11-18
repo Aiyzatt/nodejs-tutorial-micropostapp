@@ -21,13 +21,13 @@ module.exports = (app) => {
   });
 
   passport.use(new LocalStrategy({
-    usernameField: 'username',
+    usernameField: 'email',
     passwordField: 'password',
-  }, (username, password, done) => {
+  }, (email, password, done) => {
     knex('users')
     .select('*')
     .where({
-      name: username,
+      email: email,
     })
     .then(async (results) => {
       if(results.length === 0) {

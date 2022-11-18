@@ -1,9 +1,14 @@
 <header>
   <nav>
     <a href="/">トップページ</a>
-    <a href="/users/<%= userId = 1 %>">ユーザ詳細</a>
-    <a href="/users %>">ユーザ一覧</a>
-    <a href="/accounts/settings">ユーザ設定</a>
-    <a href="/logout">ログアウト</a>
+    <% if (isAuth) { %>
+      <a href="/users/<%= userId = userData.id %>">ユーザ詳細</a>
+      <a href="/users %>">ユーザ一覧</a>
+      <a href="/accounts/settings">ユーザ設定</a>
+      <a href="/logout">ログアウト</a>
+    <% } else { %>
+      <a href="/accounts/signup">ユーザ登録</a>
+      <a href="/accounts/signin">ログイン</a>
+    <% } %>
   </nav>
 </header>

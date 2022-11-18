@@ -3,6 +3,8 @@ const router = express.Router();
 const globalConfig = require('../config/global');
 const knex = require('../db/knex');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
+const User = require('../models/user');
 
 router.get('/', function(req, res, next) {
   res.redirect('/');
@@ -10,8 +12,13 @@ router.get('/', function(req, res, next) {
 
 /* GET ユーザ登録 */
 router.get('/signup', function(req, res, next) {
+  const isAuth = req.isAuthenticated();
+
+  if (isAuth) { res.redirect('/'); };
+
   res.render('accounts/signup', {
     title: globalConfig.appName + ' | ' + 'アカウント登録',
+    isAuth: isAuth,
   });
 });
 
@@ -57,16 +64,64 @@ router.post('/signup', function(req, res, next) {
 
 /* GET ログイン */
 router.get('/signin', function(req, res, next) {
+  const isAuth = req.isAuthenticated();
+
+  if (isAuth) { res.redirect('/'); };
+
   res.render('accounts/signin', {
     title: globalConfig.appName + ' | ' + 'ログイン',
+    isAuth: isAuth,
   });
 });
 
+/* POST ログイン */
+router.post('/signin', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/accounts/signin',
+    failureFlash: true,
+  }
+));
+
 /* GET ユーザ設定 */
-router.get('/settings', function(req, res, next) {
+router.get('/settings', async function(req, res, next) {
+  const isAuth = req.isAuthenticated();
+  const userId = (typeof req.user !== 'undefined') ? req.user.id : null;
+
+  if (!isAuth) { res.redirect('/'); };
+
+  const userData = await User.findById(userId);
+
   res.render('accounts/settings', {
     title: globalConfig.appName + ' | ' + 'アカウント設定',
+    isAuth: isAuth,
+    userData: userData,
   });
+});
+
+router.post('/settings', function(req, res, next) {
+  const isAuth = req.isAuthenticated();
+  const userId = (typeof req.user !== 'undefined') ? req.user.id : null;
+  const posts = req.body;
+
+  if (isAuth && userId) {
+    knex('users')
+    .where('id', '=', userId)
+    .update({
+      username: posts.username,
+      email: posts.email,
+    })
+    .then((result) => {
+      req.flash('success', '更新しました。');
+      res.redirect('/accounts/settings');
+    })
+    .catch((error) => {
+      req.flash('error', '更新ができませんでした: ' + error.sqlMessage);
+      res.redirect('/accounts/settings');
+    });
+  } else {
+    req.flash('error', '更新ができませんでした。');
+    res.redirect('/accounts/settings');
+  }
 });
 
 module.exports = router;
