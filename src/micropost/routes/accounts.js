@@ -83,29 +83,25 @@ router.post('/signin', passport.authenticate('local', {
 ));
 
 /* GET ユーザ設定 */
-router.get('/settings', async function(req, res, next) {
+router.get('/settings', function(req, res, next) {
   const isAuth = req.isAuthenticated();
-  const userId = (typeof req.user !== 'undefined') ? req.user.id : null;
 
   if (!isAuth) { res.redirect('/'); };
-
-  const userData = await User.findById(userId);
 
   res.render('accounts/settings', {
     title: globalConfig.appName + ' | ' + 'アカウント設定',
     isAuth: isAuth,
-    userData: userData,
+    userData: req.user,
   });
 });
 
 router.post('/settings', function(req, res, next) {
   const isAuth = req.isAuthenticated();
-  const userId = (typeof req.user !== 'undefined') ? req.user.id : null;
   const posts = req.body;
 
-  if (isAuth && userId) {
+  if (isAuth && req.user.id) {
     knex('users')
-    .where('id', '=', userId)
+    .where('id', '=', req.user.id)
     .update({
       username: posts.username,
       email: posts.email,
