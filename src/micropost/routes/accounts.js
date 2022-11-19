@@ -4,7 +4,7 @@ const globalConfig = require('../config/global');
 const knex = require('../db/knex');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const User = require('../models/user');
+const Util = require('../models/util');
 
 router.get('/', function(req, res, next) {
   res.redirect('/');
@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 router.get('/signup', function(req, res, next) {
   const isAuth = req.isAuthenticated();
 
-  if (isAuth) { res.redirect('/'); };
+  if (isAuth) { return res.redirect('/'); };
 
   res.render('accounts/signup', {
     title: globalConfig.appName + ' | ' + 'アカウント登録',
@@ -66,7 +66,7 @@ router.post('/signup', function(req, res, next) {
 router.get('/signin', function(req, res, next) {
   const isAuth = req.isAuthenticated();
 
-  if (isAuth) { res.redirect('/'); };
+  if (isAuth) { return res.redirect('/'); };
 
   res.render('accounts/signin', {
     title: globalConfig.appName + ' | ' + 'ログイン',
@@ -86,7 +86,7 @@ router.post('/signin', passport.authenticate('local', {
 router.get('/settings', function(req, res, next) {
   const isAuth = req.isAuthenticated();
 
-  if (!isAuth) { res.redirect('/'); };
+  if (!isAuth) { return res.redirect('/'); };
 
   res.render('accounts/settings', {
     title: globalConfig.appName + ' | ' + 'アカウント設定',
@@ -95,7 +95,7 @@ router.get('/settings', function(req, res, next) {
   });
 });
 
-router.post('/settings', function(req, res, next) {
+router.post('/settings', async function(req, res, next) {
   const isAuth = req.isAuthenticated();
   const posts = req.body;
 
@@ -105,6 +105,7 @@ router.post('/settings', function(req, res, next) {
     .update({
       username: posts.username,
       email: posts.email,
+      updated_at: await Util.getTimestomp(),
     })
     .then((result) => {
       req.flash('success', '更新しました。');

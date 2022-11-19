@@ -12,22 +12,18 @@
   <h1><%= title %></h1>
 
   <div class="flame">
-    <% isUserlist = false %>
-    <% if (!isUserlist) { %>
-      <aside class="sidebar"><%- include('./sidebar') %></aside>
-    <% } %>
+    <aside class="sidebar"><%- include('./sidebar') %></aside>
     <main class="users">
-      <% for (let index = 1; index < 4; index++) { %>
+      <% for (let user of users) { %>
         <div class="user">
           <div class="profile_filed">
             <img src="<%= null %>" alt="profile image" class="profile_image">
-            <span class="username"><%= uesrname = 'aiyztt' %></span>
+            <span class="username"><%= user.username %></span>
           </div>
           <div class="function_field">
-            <% isAdmin = true %>
-            <% if (isAdmin) { %>
+            <% if (userData.is_admin) { %>
             <form action="/users/delete" method="post">
-              <input type="hidden" name="user_id" value="<%= userId = index %>">
+              <input type="hidden" name="user_id" value="<%= user.id %>">
               <input type="submit" value="削除">
             </form>
             <% } %>
