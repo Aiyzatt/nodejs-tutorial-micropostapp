@@ -1,21 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const globalConfig = require('../config/global');
+const Microposts = require('../models/micropost');
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
   const isAuth = req.isAuthenticated();
 
-  res.render('index', {
-    title: globalConfig.appName + ' | ' + 'トップページ',
-    isAuth: isAuth,
-    userData: req.user,
-  });
+  if (!isAuth) {
+    res.render('index', {
+      title: globalConfig.appName + ' | ' + 'トップページ',
+      isAuth: isAuth,
+    });
+  } else {
+    const microposts = await Microposts.getMicroposts(8);
+    res.render('index', {
+      title: globalConfig.appName + ' | ' + '最新のつぶやき',
+      isAuth: isAuth,
+      userData: req.user,
+      microposts: microposts,
+      isPostable: true,
+    });
+  }
 });
 
 router.use('/users', require('./users'));
 router.use('/accounts', require('./accounts'));
+router.use('/microposts', require('./microposts'));
 router.use('/logout', require('./logout'));
 
 module.exports = router;

@@ -22,21 +22,23 @@
       <aside class="pane_left"><%- include('./sidebar') %></aside>
       <main class="posts pane_right">
         <h2>最新のつぶやき</h2>
-        <% for (let index = 1; index < 4; index++) { %>
+        <% for (let micropost of microposts) { %>
           <div class="post">
             <div class="profile_filed">
               <img src="<%= null %>" alt="profile image" class="profile_image">
-              <span class="username"><%= uesrname = 'aiyztt' %></span>
+              <span class="username"><%= micropost.username %></span>
             </div>
             <div class="content_field">
-              <p"><%= content = 'As it did more and more with its tail, its hands became clumsy. It makes its nest high in the treetops.Kingdra sleeps on the seafloor where it is otherwise devoid of life.' %></p>
-              <span><%= date = '2d' %></span>
+              <p"><%= micropost.content %></p>
+              <span><%= micropost.created_at %></span>
             </div>
             <div class="function_field">
-              <form action="/microposts/delete" method="post">
-                <input type="hidden" name="micropost_id" value="<%= micropostId = index %>">
-                <input type="submit" value="削除">
-              </form>
+              <% if (userData.is_admin || (micropost.user_id === userData.id)) { %>
+                <form action="/microposts/delete" method="post">
+                  <input type="hidden" name="micropost_id" value="<%= micropost.id %>">
+                  <input type="submit" value="削除">
+                </form>
+              <% } %>
             </div>
           </div>
         <% } %>

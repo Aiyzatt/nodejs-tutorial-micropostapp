@@ -1,6 +1,6 @@
 <div class="profile_filed">
   <img src="<%= null %>" alt="profile image" class="profile_image">
-  <span class="username"><%= uesrname = 'aiyztt' %></span>
+  <span class="username"><%= userData.username %></span>
 </div>
 <div class="usage_field">
   <p><%= micropostLength = 28 %> つぶやき</p>
@@ -10,11 +10,12 @@
   </div>
 </div>
 <div class="function_field">
-  <% isPostable = true %>
-  <% if (isPostable) { %>
-    <form action="/posts/add" method="post">
-      <textarea name="content" cols="30" rows="10" placeholder="つぶやきたいことをここに書きます…"></textarea>
-      <input type="submit" value="つぶやく">
-    </form>
+  <% if (typeof isPostable !== 'undefined') { %>
+    <% if (isPostable) { %>
+      <form action="/microposts/add" method="post">
+        <textarea name="content" cols="30" rows="10" placeholder="つぶやきたいことをここに書きます…"></textarea>
+        <input type="submit" value="つぶやく">
+      </form>
     <% } %>
+  <% } %>
 </div>
