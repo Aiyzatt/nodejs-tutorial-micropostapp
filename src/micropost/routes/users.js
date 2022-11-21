@@ -39,7 +39,6 @@ router.get('/:userId', function(req, res, next) {
 /* GET ユーザ詳細_フォローリスト */
 router.get('/:userId/following', async function(req, res, next) {
   const isAuth = req.isAuthenticated();
-  console.log('isAuth: ' + isAuth);
 
   if (!isAuth) { return res.redirect('/'); };
 
@@ -57,7 +56,6 @@ router.get('/:userId/following', async function(req, res, next) {
 /* GET ユーザ詳細_フォロワーリスト */
 router.get('/:userId/followers', async function(req, res, next) {
   const isAuth = req.isAuthenticated();
-  console.log('isAuth: ' + isAuth);
 
   if (!isAuth) { return res.redirect('/'); };
 
