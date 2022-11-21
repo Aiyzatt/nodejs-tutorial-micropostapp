@@ -82,6 +82,18 @@ router.post('/signin', passport.authenticate('local', {
   }
 ));
 
+router.post('/signin', passport.authenticate('local'), async (req, res) => {
+  await req.login();
+
+  const isAuth = req.isAuthenticated();
+  if (isAuth) {
+    return res.redirect('/');
+  } else {
+    req.flash('error', 'ログインに失敗しました。');
+    return res.redirect('/accounts/signin');
+  }
+});
+
 /* GET ユーザ設定 */
 router.get('/settings', function(req, res, next) {
   const isAuth = req.isAuthenticated();
