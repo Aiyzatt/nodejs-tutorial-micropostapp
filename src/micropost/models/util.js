@@ -1,5 +1,5 @@
 
-function getTimestomp(date = null) {
+async function getTimestomp(date = null) {
   const d = (date) ? date : new Date();
   const year = d.getFullYear();
   const month = d.getMonth() + 1;
