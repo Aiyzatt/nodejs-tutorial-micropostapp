@@ -14,7 +14,7 @@ router.get('/', async function(req, res, next) {
       isAuth: isAuth,
     });
   } else {
-    const microposts = await Microposts.getMicroposts(8);
+    const microposts = await Microposts.getMicroposts();
     res.render('index', {
       title: globalConfig.appName + ' | ' + '最新のつぶやき',
       isAuth: isAuth,
