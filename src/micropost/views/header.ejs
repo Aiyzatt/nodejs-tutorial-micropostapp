@@ -2,7 +2,7 @@
   <nav>
     <a href="/">トップページ</a>
     <% if (isAuth) { %>
-      <a href="/users/<%= userId = userData.id %>">ユーザ詳細</a>
+      <a href="/users/<%= userId = authUser.id %>">ユーザ詳細</a>
       <a href="/users %>">ユーザ一覧</a>
       <a href="/accounts/settings">ユーザ設定</a>
       <a href="/logout">ログアウト</a>

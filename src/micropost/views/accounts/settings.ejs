@@ -17,11 +17,11 @@
   <form action="" method="post">
     <div class="form_item">
       <label for="username">ユーザ名</label>
-      <input type="text" name="username" id="username" autocomplete="username" value="<%= userData.username %>" required>
+      <input type="text" name="username" id="username" autocomplete="username" value="<%= authUser.username %>" required>
     </div>
     <div class="form_item">
       <label for="email">メールアドレス</label>
-      <input type="email" name="email" id="email" autocomplete="email" value="<%= userData.email %>" required>
+      <input type="email" name="email" id="email" autocomplete="email" value="<%= authUser.email %>" required>
     </div>
     <input type="submit" value="更新する">
   </form>

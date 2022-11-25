@@ -18,7 +18,8 @@ router.get('/', async function(req, res, next) {
     res.render('index', {
       title: globalConfig.appName + ' | ' + '最新のつぶやき',
       isAuth: isAuth,
-      userData: req.user,
+      authUser: req.user,
+      user: req.user,
       microposts: microposts,
       isPostable: true,
     });

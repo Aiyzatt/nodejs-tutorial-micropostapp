@@ -103,7 +103,7 @@ router.get('/settings', function(req, res, next) {
   res.render('accounts/settings', {
     title: globalConfig.appName + ' | ' + 'アカウント設定',
     isAuth: isAuth,
-    userData: req.user,
+    authUser: req.user,
   });
 });
 

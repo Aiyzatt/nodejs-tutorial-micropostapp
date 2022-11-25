@@ -21,7 +21,7 @@
             <span class="username"><%= user.username %></span>
           </div>
           <div class="function_field">
-            <% if (userData.is_admin) { %>
+            <% if (authUser.is_admin) { %>
             <form action="/users/delete" method="post">
               <input type="hidden" name="user_id" value="<%= user.id %>">
               <input type="submit" value="削除">

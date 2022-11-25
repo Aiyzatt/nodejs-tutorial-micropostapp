@@ -5,6 +5,7 @@ const globalConfig = require('../config/global');
 const Util = require('../models/util');
 const User = require('../models/user');
 const Relationship = require('../models/relationship');
+const Microposts = require('../models/micropost');
 
 /* GET ユーザ一覧 */
 router.get('/', async function(req, res, next) {
@@ -17,22 +18,31 @@ router.get('/', async function(req, res, next) {
   res.render('users', {
     title: globalConfig.appName + ' | ' + 'ユーザ一覧',
     isAuth: isAuth,
-    userData: req.user,
+    authUser: req.user,
+    user: req.user,
     users: users,
   });
 });
 
 /* GET ユーザ詳細 */
-router.get('/:userId', function(req, res, next) {
+router.get('/:userId', async function(req, res, next) {
   const isAuth = req.isAuthenticated();
+  const userId = req.params.userId;
 
   if (!isAuth) { return res.redirect('/'); };
 
+  const user = await User.findById(userId);
+
+  if (Object.keys(user).length === 0) { return res.redirect('/'); };
+
+  const microposts = await Microposts.getMicroposts(userId);
+
   res.render('index', {
     title: globalConfig.appName + ' | ' + 'ユーザ詳細',
-    params: req.params,
     isAuth: isAuth,
-    userData: req.user,
+    authUser: req.user,
+    user: user,
+    microposts: microposts,
   });
 });
 
@@ -42,13 +52,18 @@ router.get('/:userId/following', async function(req, res, next) {
 
   if (!isAuth) { return res.redirect('/'); };
 
+  const user = await User.findById(userId);
+
+  if (Object.keys(user).length === 0) { return res.redirect('/'); };
+
   const users = await Relationship.getFollowings(req.user.id);
 
   res.render('users', {
     title: globalConfig.appName + ' | ' + 'フォロー中',
     params: req.params,
     isAuth: isAuth,
-    userData: req.user,
+    authUser: req.user,
+    user: user,
     users: users,
   });
 });
@@ -59,13 +74,18 @@ router.get('/:userId/followers', async function(req, res, next) {
 
   if (!isAuth) { return res.redirect('/'); };
 
+  const user = await User.findById(userId);
+
+  if (Object.keys(user).length === 0) { return res.redirect('/'); };
+
   const users = await Relationship.getFollowers(req.user.id);
 
   res.render('users', {
     title: globalConfig.appName + ' | ' + 'フォロワー',
     params: req.params,
     isAuth: isAuth,
-    userData: req.user,
+    authUser: req.user,
+    user: user,
     users: users,
   });
 });
