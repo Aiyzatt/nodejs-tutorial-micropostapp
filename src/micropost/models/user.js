@@ -2,7 +2,7 @@ const knex = require('../db/knex');
 const TABLE_NAME = 'users';
 
 async function getUsers() {
-  const selectColumns = ['id', 'username', 'email', 'is_admin', 'created_at'];
+  const selectColumns = ['id', 'username', 'email', 'is_admin', 'profile_image_uri', 'created_at'];
   const users = await knex(TABLE_NAME)
     .select(selectColumns)
     .where({deleted_at: null});
@@ -15,7 +15,7 @@ async function findById(userId) {
 }
 
 async function where(condition) {
-  const selectColumns = ['id', 'username', 'email', 'is_admin', 'created_at'];
+  const selectColumns = ['id', 'username', 'email', 'is_admin', 'profile_image_uri', 'created_at'];
   return await knex(TABLE_NAME)
     .where(condition)
     .select(selectColumns)

@@ -38,12 +38,16 @@ router.post('/signup', function(req, res, next) {
         res.redirect('/accounts/signup');
       } else {
         const hashedPassword = await bcrypt.hash(posts.password, 10);
+        let [min, max] = [1, 13]; 
+        const num = Math.floor(Math.random() * (max + 1 - min)) + min ;
+
         knex('users')
           .insert({
             username: posts.username,
             password: hashedPassword,
             email: posts.email,
             is_admin: 0,
+            profile_image_uri: `Humaaans_${num}.png`,
           })
           .then((results) => {
             req.session.userid = results[0];
