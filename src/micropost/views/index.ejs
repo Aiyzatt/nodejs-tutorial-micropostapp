@@ -12,13 +12,13 @@
   <h1><%= title %></h1>
 
   <% if (!isAuth) { %>
-    <div class="flame">
+    <div class="frame">
       <p>ちょっとした気持ちをつぶやくサービスです。<br>他人のつぶやきもみられます。</p>
       <p>アカウント登録は<a href="/accounts/signup">こちら</a>から。</p>
       <p>すでにアカウントをお持ちの方は<a href="/accounts/signin">こちら</a>から。</p>
     </div>
   <% } else { %>
-    <div class="flame">
+    <div class="frame">
       <aside class="pane_left"><%- include('./sidebar') %></aside>
       <main class="posts pane_right">
         <h2>最新のつぶやき</h2>
