@@ -5,7 +5,7 @@ const globalConfig = require('../config/global');
 const Util = require('../models/util');
 const User = require('../models/user');
 const Relationship = require('../models/relationship');
-const Microposts = require('../models/micropost');
+const Micropost = require('../models/micropost');
 
 /* GET ユーザ一覧 */
 router.get('/', async function(req, res, next) {
@@ -35,7 +35,7 @@ router.get('/:userId', async function(req, res, next) {
 
   if (Object.keys(user).length === 0) { return res.redirect('/'); };
 
-  const microposts = await Microposts.getMicroposts(userId);
+  const microposts = await Micropost.getMicroposts(userId);
 
   res.render('index', {
     title: globalConfig.appName + ' | ' + 'ユーザ詳細',
