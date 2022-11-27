@@ -3,10 +3,10 @@
   <span class="username"><%= user.username %></span>
 </div>
 <div class="usage_field">
-  <p><%= micropostLength = 28 %> つぶやき</p>
+  <p><%= user.micropostCount %> つぶやき</p>
   <div>
-    <p><%= followingLength = 0 %> フォロー中</p>
-    <p><%= followerLength = 5 %> フォロワー</p>
+    <p><%= user.followingCount %> フォロー中</p>
+    <p><%= user.followerCount %> フォロワー</p>
   </div>
 </div>
 <div class="function_field">

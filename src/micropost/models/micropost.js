@@ -7,6 +7,7 @@ async function getMicroposts(userId = null) {
     'content',
     'user_id',
     'username',
+    'profile_image_uri',
     'microposts.created_at as created_at'
   ];
   let microposts = [];
@@ -35,6 +36,17 @@ async function getMicroposts(userId = null) {
   return microposts;
 }
 
+async function getMicropostCount(userId) {
+  const micropostCount = await knex(TABLE_NAME)
+    .count('id as micropostCount')
+    .where({
+      user_id: userId,
+      deleted_at: null,
+    });
+  return {...micropostCount[0]};
+}
+
 module.exports = {
   getMicroposts,
+  getMicropostCount,
 };

@@ -21,11 +21,25 @@
     <div class="frame">
       <aside class="pane_left"><%- include('./sidebar') %></aside>
       <main class="posts pane_right">
-        <h2>最新のつぶやき</h2>
+        <div>
+          <% if (typeof isFollowing !== 'undefined' && authUser.id !== user.id) { %>
+            <% if (isFollowing) { %>
+              <form action="/users/unfollow" method="post">
+                <input name="follower_user_id" type="hidden" value="<%= user.id %>">
+                <input type="submit" value="フォローを解除する">
+              </form>
+            <% } else { %>
+              <form action="/users/follow" method="post">
+                <input name="follower_user_id" type="hidden" value="<%= user.id %>">
+                <input type="submit" value="フォローする">
+              </form>
+            <% } %>
+          <% } %>
+        </div>
         <% for (let micropost of microposts) { %>
           <div class="post">
             <div class="profile_filed">
-              <img src="<%= null %>" alt="profile image" class="profile_image">
+              <img src="<%= '/images/' + micropost.profile_image_uri %>" alt="profile image" class="profile_image">
               <span class="username"><%= micropost.username %></span>
             </div>
             <div class="content_field">

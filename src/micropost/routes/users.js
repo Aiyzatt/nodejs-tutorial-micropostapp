@@ -31,11 +31,12 @@ router.get('/:userId', async function(req, res, next) {
 
   if (!isAuth) { return res.redirect('/'); };
 
-  const user = await User.findById(userId);
+  const user = await User.getUsers(userId);
 
   if (Object.keys(user).length === 0) { return res.redirect('/'); };
 
   const microposts = await Micropost.getMicroposts(userId);
+  const isFollowing = await Relationship.isFollowing(req.user.id, userId);
 
   res.render('index', {
     title: globalConfig.appName + ' | ' + 'ユーザ詳細',
@@ -43,20 +44,22 @@ router.get('/:userId', async function(req, res, next) {
     authUser: req.user,
     user: user,
     microposts: microposts,
+    isFollowing: isFollowing,
   });
 });
 
 /* GET ユーザ詳細_フォローリスト */
 router.get('/:userId/following', async function(req, res, next) {
   const isAuth = req.isAuthenticated();
+  const userId = req.params.userId;
 
   if (!isAuth) { return res.redirect('/'); };
 
-  const user = await User.findById(userId);
+  const user = await User.getUsers(userId);
 
   if (Object.keys(user).length === 0) { return res.redirect('/'); };
 
-  const users = await Relationship.getFollowings(req.user.id);
+  const users = await Relationship.getFollowings(userId);
 
   res.render('users', {
     title: globalConfig.appName + ' | ' + 'フォロー中',
@@ -71,14 +74,15 @@ router.get('/:userId/following', async function(req, res, next) {
 /* GET ユーザ詳細_フォロワーリスト */
 router.get('/:userId/followers', async function(req, res, next) {
   const isAuth = req.isAuthenticated();
+  const userId = req.params.userId;
 
   if (!isAuth) { return res.redirect('/'); };
 
-  const user = await User.findById(userId);
+  const user = await User.getUsers(userId);
 
   if (Object.keys(user).length === 0) { return res.redirect('/'); };
 
-  const users = await Relationship.getFollowers(req.user.id);
+  const users = await Relationship.getFollowers(userId);
 
   res.render('users', {
     title: globalConfig.appName + ' | ' + 'フォロワー',
@@ -101,12 +105,57 @@ router.post('/delete', async function(req, res, next) {
     .update({ deleted_at: await Util.getTimestomp(), })
     .then(() => {
       req.flash('success', '削除しました。');
-      res.redirect('/users');
+      return res.redirect('/users');
     })
     .catch((error) => {
       req.flash('error', '削除ができませんでした: ' + error.sqlMessage);
-      res.redirect('/users');
+      return res.redirect('/users');
     });
+  }
+});
+
+/* POST フォロー */
+router.post('/follow', async function(req, res, next) {
+  const isAuth = req.isAuthenticated();
+  const posts = req.body;
+  
+  if (isAuth) {
+    knex('relationships')
+      .insert({
+        follower_user_id: req.user.id,
+        followed_user_id: posts.follower_user_id,
+      })
+      .then(() => {
+        req.flash('success', 'フォローしました。');
+        return res.redirect('/users/' + posts.follower_user_id);
+      })
+      .catch((error) => {
+        req.flash('error', 'フォローできませんでした: ' + error.sqlMessage);
+        return res.redirect('/users/' + posts.follower_user_id);
+      });
+  }
+});
+
+/* POST フォロー解除 */
+router.post('/unfollow', async function(req, res, next) {
+  const isAuth = req.isAuthenticated();
+  const posts = req.body;
+  
+  if (isAuth) {
+    knex('relationships')
+      .where({
+        follower_user_id: req.user.id,
+        followed_user_id: posts.follower_user_id,
+      })
+      .update({ deleted_at: await Util.getTimestomp(), })
+      .then(() => {
+        req.flash('success', 'フォローを解除しました。');
+        return res.redirect('/users/' + posts.follower_user_id);
+      })
+      .catch((error) => {
+        req.flash('error', 'フォローを解除できませんでした: ' + error.sqlMessage);
+        return res.redirect('/users/' + posts.follower_user_id);
+      });
   }
 });
 
