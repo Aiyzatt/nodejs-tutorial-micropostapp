@@ -17,8 +17,10 @@
       <% for (let user of users) { %>
         <div class="user">
           <div class="profile_filed">
-            <img src="<%= '/images/' + user.profile_image_uri %>" alt="profile image" class="profile_image">
-            <span class="username"><%= user.username %></span>
+            <a href="<%= '/users/' + user.id %>">
+              <img src="<%= '/images/' + user.profile_image_uri %>" alt="profile image" class="profile_image">
+              <span class="username"><%= user.username %></span>
+            </a>
           </div>
           <div class="function_field">
             <% if (authUser.is_admin) { %>
